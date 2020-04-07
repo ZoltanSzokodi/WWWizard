@@ -5,6 +5,6 @@ const { registerUser } = require('../controllers/users');
 // @desc    Register a user
 // @route   Post /api/v1/users
 // @access  Public
-router.route('/').post(registerUser);
+router.route('/register').post(registerUser);
 
 module.exports = router;

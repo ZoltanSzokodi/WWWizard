@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const morgan = require('morgan');
 const colors = require('colors');
 const path = require('path');
+const cookieParser = require('cookie-parser');
 const errorHandler = require('./middlewares/errorHandler');
 
 // Load env variables from the config.env file
@@ -19,6 +20,9 @@ connectDB();
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
+
+// Cookie parser middleware
+// app.use(cookieParser);
 
 // Instead of body-parser we use now the express built in module for parsing bodies
 app.use(express.json());
