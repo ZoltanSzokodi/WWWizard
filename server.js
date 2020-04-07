@@ -22,7 +22,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // Cookie parser middleware
-// app.use(cookieParser);
+app.use(cookieParser());
 
 // Instead of body-parser we use now the express built in module for parsing bodies
 app.use(express.json());

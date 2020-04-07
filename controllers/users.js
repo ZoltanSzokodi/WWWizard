@@ -4,6 +4,9 @@ const ErrorResponse = require('../utils/errorResponse');
 const sendResponseToken = require('../utils/sendResponseToken');
 const gravatar = require('gravatar');
 
+// @desc    Register a user
+// @route   Post /api/v1/users/register
+// @access  Public
 exports.registerUser = asyncHandler(async (req, res, next) => {
   const { email } = req.body;
 
@@ -23,4 +26,17 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
   user = await User.create({ ...req.body, avatar });
 
   sendResponseToken(user, 201, res);
+});
+
+// @desc    Get all users
+// @route   Get /api/v1/users
+// @access  Public
+exports.getAllUsers = asyncHandler(async (req, res, next) => {
+  const users = await User.find({});
+
+  res.status(200).json({
+    success: true,
+    count: users.length,
+    data: users,
+  });
 });
