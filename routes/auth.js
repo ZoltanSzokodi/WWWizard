@@ -1,11 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-// @desc
-// @route   GET /api/v1/auth
-// @access  Public
-router.route('/').get(async (req, res, next) => {
- res.send('Hello from the auth route');
-});
+const { protect } = require('../middlewares/auth');
+
+const { getAuthUser } = require('../controllers/auth');
+
+router.route('/').get(protect, getAuthUser);
 
 module.exports = router;
