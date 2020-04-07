@@ -1,0 +1,39 @@
+{
+ "name": "wwwizard",
+ "version": "1.0.0",
+ "description": "a mern stack application built to help software developers connect, share experience and job opportunities",
+ "main": "server.js",
+ "scripts": {
+  "start": "SET NODE_ENV=production & node server",
+  "dev": "nodemon server"
+ },
+ "repository": {
+  "type": "git",
+  "url": "git+https://github.com/ZoltanSzokodi/WWWizard.git"
+ },
+ "keywords": [
+  "web",
+  "development",
+  "networking",
+  "job",
+  "opportunity",
+  "open",
+  "source"
+ ],
+ "author": "Zoltan Szokodi",
+ "license": "MIT",
+ "bugs": {
+  "url": "https://github.com/ZoltanSzokodi/WWWizard/issues"
+ },
+ "homepage": "https://github.com/ZoltanSzokodi/WWWizard#readme",
+ "dependencies": {
+  "colors": "^1.4.0",
+  "dotenv": "^8.2.0",
+  "express": "^4.17.1",
+  "mongoose": "^5.9.7",
+  "morgan": "^1.10.0"
+ },
+ "devDependencies": {
+  "nodemon": "^2.0.2"
+ }
+}
