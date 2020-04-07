@@ -22,9 +22,16 @@ if (process.env.NODE_ENV === 'development') {
 // Instead of body-parser we use now the express built in module for parsing bodies
 app.use(express.json());
 
-app.get('/', (req, res) => {
- res.send('Hello There');
-});
+// Define routes
+const users = require('./routes/users');
+const auth = require('./routes/auth');
+const posts = require('./routes/posts');
+const profile = require('./routes/profile');
+
+app.use('/api/v1/users', users);
+app.use('/api/v1/auth', auth);
+app.use('/api/v1/posts', posts);
+app.use('/api/v1/profile', profile);
 
 const PORT = process.env.PORT || 5000;
 
