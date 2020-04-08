@@ -37,16 +37,18 @@ exports.postUserProfile = asyncHandler(async (req, res) => {
     facebook,
   } = req.body;
 
-  const profileFields = {
-    user: req.user.id,
-    company,
-    location,
-    website,
-    bio,
-    skills: skills.split(',').map(skill => skill.trim()),
-    status,
-    githubusername,
-  };
+  // Build profile object
+  const profileFields = {};
+  profileFields.user = req.user.id;
+  if (company) profileFields.company = company;
+  if (website) profileFields.website = website;
+  if (location) profileFields.location = location;
+  if (bio) profileFields.bio = bio;
+  if (status) profileFields.status = status;
+  if (githubusername) profileFields.githubusername = githubusername;
+  if (skills) {
+    profileFields.skills = skills.split(',').map(skill => skill.trim());
+  }
 
   // Build social object and add to profileFields
   profileFields.social = {};
@@ -63,14 +65,14 @@ exports.postUserProfile = asyncHandler(async (req, res) => {
   if (profile) {
     profile = await Profile.findOneAndUpdate(
       { user: req.user.id },
-      { ...profileFields },
+      { $set: profileFields },
       { new: true, runValidators: true }
     );
   }
 
   // If user profile does not exist, create
   if (!profile) {
-    profile = await Profile.create({ user: req.user.id, ...profileFields });
+    profile = await Profile.create(profileFields);
   }
 
   res.status(201).json({
