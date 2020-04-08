@@ -1,5 +1,7 @@
 const ErrorResponse = require('../utils/errorResponse');
 
+// Global error handler middleware that catches unhandled rejections in the server.js file
+// Handy for catching mongoose validation errors, cast errors, etc.
 const errorHandler = (err, req, res, next) => {
   let error = { ...err };
   error.message = err.message;

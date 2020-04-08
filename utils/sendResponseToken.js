@@ -1,3 +1,4 @@
+// Reusable response function for sending token for authentication
 const sendResponseToken = (user, statusCode, res) => {
   // Create token
   const token = user.getSignedJwt();

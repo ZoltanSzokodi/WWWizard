@@ -3,9 +3,9 @@ const jwt = require('jsonwebtoken');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middlewares/asyncHandler');
 
+// Middleware for protecting routes fron unauthenticated users
 exports.protect = asyncHandler(async (req, res, next) => {
   let token;
-
   // Check if there is a token in the headers or in the cookie
   if (
     req.headers.authorization &&

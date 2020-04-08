@@ -1,3 +1,4 @@
+// A reusable and customizable error response class
 class ErrorResponse extends Error {
   constructor(message, statusCode) {
     super(message);
