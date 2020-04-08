@@ -28,15 +28,15 @@ app.use(cookieParser());
 app.use(express.json());
 
 // Define routes
+const profile = require('./routes/profile');
 const users = require('./routes/users');
 const auth = require('./routes/auth');
 const posts = require('./routes/posts');
-const profile = require('./routes/profile');
 
-app.use('/api/v1/users', users);
+app.use('/api/v1/profile', profile);
+// app.use('/api/v1/users', users);
 app.use('/api/v1/auth', auth);
 app.use('/api/v1/posts', posts);
-app.use('/api/v1/profile', profile);
 
 // Add custom error handler middleware
 app.use(errorHandler);

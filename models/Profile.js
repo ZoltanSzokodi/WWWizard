@@ -4,7 +4,6 @@ const ProfileSchema = mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user',
-    required: true,
   },
   company: String,
   website: {
