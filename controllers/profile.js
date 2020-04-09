@@ -2,6 +2,7 @@ const Profile = require('../models/Profile');
 const User = require('../models/User');
 const asyncHandler = require('../middlewares/asyncHandler');
 const ErrorResponse = require('../utils/errorResponse');
+const axios = require('axios');
 
 // @desc    Get my profile
 // @route   GET /api/v1/profile/me
@@ -295,5 +296,31 @@ exports.deleteEducation = asyncHandler(async (req, res, next) => {
     success: true,
     profile: profile.id,
     data: profile.education,
+  });
+});
+
+// @desc    Get user repositories from Github
+// @route   GET /api/v1/profile/github/:username
+// @access  Public
+exports.getGithubRepos = asyncHandler(async (req, res, next) => {
+  const uri = encodeURI(
+    `https://api.github.com/users/${req.params.username}/repos?per_page=5&sort=created:asc`
+  );
+
+  const headers = {
+    'user-agent': 'node.js',
+    Authorization: `token ${process.env.GITHUB_ACCESS_TOKEN}`,
+  };
+
+  const gitHubResponse = await axios.get(uri, { headers });
+
+  if (gitHubResponse.status !== 200) {
+    return next(new ErrorResponse('No Github repos found', 404));
+  }
+
+  res.status(200).json({
+    success: true,
+    count: gitHubResponse.data.length,
+    data: gitHubResponse.data,
   });
 });

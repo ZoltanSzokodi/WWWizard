@@ -15,6 +15,7 @@ const {
   addEducation,
   updateEducation,
   deleteEducation,
+  getGithubRepos,
 } = require('../controllers/profile');
 
 router
@@ -40,5 +41,7 @@ router
   .route('/education/:id')
   .put(protect, updateEducation)
   .delete(protect, deleteEducation);
+
+router.route('/github/:username').get(getGithubRepos);
 
 module.exports = router;
