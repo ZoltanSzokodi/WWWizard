@@ -31,7 +31,9 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
 // @route   GET /api/v1/users
 // @access  Public
 exports.getAllUsers = asyncHandler(async (req, res, next) => {
-  const users = await User.find({});
+  const users = await User.find();
+
+  console.log(req);
 
   res.status(200).json({
     success: true,

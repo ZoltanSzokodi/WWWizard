@@ -5,11 +5,43 @@ const ErrorResponse = require('../utils/errorResponse');
 // @desc    Get my profile
 // @route   GET /api/v1/profile/me
 // @access  Private
-exports.getUserProfile = asyncHandler(async (req, res, next) => {
+exports.getMyProfile = asyncHandler(async (req, res, next) => {
   const profile = await Profile.findOne({ user: req.user.id });
 
   if (!profile) {
     return next(new ErrorResponse(`There is no profile for this user`, 404));
+  }
+
+  res.status(200).json({
+    success: true,
+    data: profile,
+  });
+});
+
+// @desc    Get all profiles
+// @route   GET /api/v1/profile
+// @access  Public
+
+exports.getAllProfiles = asyncHandler(async (req, res, next) => {
+  const profiles = await Profile.find().populate('user', ['name', 'avatar']);
+
+  res.status(200).json({
+    success: true,
+    count: profiles.length,
+    data: profiles,
+  });
+});
+
+// @desc    Get profile by user id
+// @route   GET /api/v1/profile/user/:id
+// @access  Public
+exports.getUserProfile = asyncHandler(async (req, res, next) => {
+  const profile = await Profile.findOne({
+    user: req.params.id,
+  }).populate('user', ['name', 'avatar']);
+
+  if (!profile) {
+    return next(new ErrorResponse('Profile not found', 404));
   }
 
   res.status(200).json({
