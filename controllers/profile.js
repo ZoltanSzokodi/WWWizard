@@ -1,4 +1,5 @@
 const Profile = require('../models/Profile');
+const User = require('../models/User');
 const asyncHandler = require('../middlewares/asyncHandler');
 const ErrorResponse = require('../utils/errorResponse');
 
@@ -6,7 +7,10 @@ const ErrorResponse = require('../utils/errorResponse');
 // @route   GET /api/v1/profile/me
 // @access  Private
 exports.getMyProfile = asyncHandler(async (req, res, next) => {
-  const profile = await Profile.findOne({ user: req.user.id });
+  const profile = await Profile.findOne({ user: req.user.id }).populate(
+    'user',
+    ['name', 'avatar']
+  );
 
   if (!profile) {
     return next(new ErrorResponse(`There is no profile for this user`, 404));
@@ -110,5 +114,39 @@ exports.postUserProfile = asyncHandler(async (req, res) => {
   res.status(201).json({
     success: true,
     data: profile,
+  });
+});
+
+// @desc    Add profile experience
+// @route   PUT /api/v1/profile/experience
+// @access  Private
+exports.addExperience = asyncHandler(async (req, res, next) => {
+  const newExperience = { ...req.body };
+
+  const profile = await Profile.findOne({ user: req.user });
+
+  profile.experience.unshift(newExperience);
+
+  await profile.save();
+
+  res.status(201).json({
+    success: true,
+    profile: profile.id,
+    data: profile.experience,
+  });
+});
+
+// @desc    Remove profile, user & post
+// @route   DELETE /api/v1/profile
+// @access  Private
+exports.deleteProfileAndUser = asyncHandler(async (req, res, next) => {
+  // Delete profile
+  await Profile.findOneAndDelete({ user: req.user.id });
+  // Delete user
+  await User.findByIdAndDelete(req.user.id);
+
+  res.status(200).json({
+    success: true,
+    data: {},
   });
 });
