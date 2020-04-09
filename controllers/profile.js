@@ -136,6 +136,35 @@ exports.addExperience = asyncHandler(async (req, res, next) => {
   });
 });
 
+// @desc    Update profile experience
+// @route   PUT /api/v1/profile/experience/:id
+// @access  Private
+exports.updateExperience = asyncHandler(async (req, res, next) => {
+  const updatedExperience = { ...req.body };
+
+  const profile = await Profile.findOne({ user: req.user });
+
+  await profile.experience.forEach((exp, i) => {
+    // Find the profile that needs to be updatad according to it's id
+    if (exp._id == req.params.id) {
+      // Find the matching props and replace the old one with the updated one
+      for (let prop in profile.experience[i]) {
+        if (updatedExperience.hasOwnProperty(prop)) {
+          profile.experience[i][prop] = updatedExperience[prop];
+        }
+      }
+    }
+  });
+
+  await profile.save();
+
+  res.status(201).json({
+    success: true,
+    profile: profile.id,
+    data: profile.experience,
+  });
+});
+
 // @desc    Remove profile, user & post
 // @route   DELETE /api/v1/profile
 // @access  Private

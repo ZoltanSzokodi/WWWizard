@@ -9,6 +9,7 @@ const {
   getAllProfiles,
   postUserProfile,
   addExperience,
+  updateExperience,
   deleteProfileAndUser,
 } = require('../controllers/profile');
 
@@ -20,5 +21,6 @@ router
 router.route('/me').get(protect, getMyProfile);
 router.route('/user/:id').get(getUserProfile);
 router.route('/experience').put(protect, addExperience);
+router.route('/experience/:id').put(protect, updateExperience);
 
 module.exports = router;
