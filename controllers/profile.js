@@ -59,41 +59,79 @@ exports.getUserProfile = asyncHandler(async (req, res, next) => {
 // @route   POST /api/v1/profile
 // @access  Private
 exports.postUserProfile = asyncHandler(async (req, res) => {
-  const {
-    company,
-    location,
-    website,
-    bio,
-    skills,
-    status,
-    githubusername,
-    youtube,
-    twitter,
-    instagram,
-    linkedin,
-    facebook,
-  } = req.body;
+  // const {
+  //   company,
+  //   location,
+  //   website,
+  //   bio,
+  //   skills,
+  //   status,
+  //   githubusername,
+  //   youtube,
+  //   twitter,
+  //   instagram,
+  //   linkedin,
+  //   facebook,
+  // } = req.body;
 
   // Build profile object
-  const profileFields = {};
-  profileFields.user = req.user.id;
-  if (company) profileFields.company = company;
-  if (website) profileFields.website = website;
-  if (location) profileFields.location = location;
-  if (bio) profileFields.bio = bio;
-  if (status) profileFields.status = status;
-  if (githubusername) profileFields.githubusername = githubusername;
-  if (skills) {
-    profileFields.skills = skills.split(',').map(skill => skill.trim());
-  }
+  // const profileFields = {};
+  // profileFields.user = req.user.id;
+  // if (company) profileFields.company = company;
+  // if (website) profileFields.website = website;
+  // if (location) profileFields.location = location;
+  // if (bio) profileFields.bio = bio;
+  // if (status) profileFields.status = status;
+  // if (githubusername) profileFields.githubusername = githubusername;
+  // if (skills) {
+  //   profileFields.skills = skills.split(',').map(skill => skill.trim());
+  // }
 
   // Build social object and add to profileFields
+  // profileFields.social = {};
+  // if (youtube) profileFields.social.youtube = youtube;
+  // if (twitter) profileFields.social.twitter = twitter;
+  // if (facebook) profileFields.social.facebook = facebook;
+  // if (linkedin) profileFields.social.linkedin = linkedin;
+  // if (instagram) profileFields.social.instagram = instagram;
+
+  // Build profile object with social nested object
+  const profileFields = {};
   profileFields.social = {};
-  if (youtube) profileFields.social.youtube = youtube;
-  if (twitter) profileFields.social.twitter = twitter;
-  if (facebook) profileFields.social.facebook = facebook;
-  if (linkedin) profileFields.social.linkedin = linkedin;
-  if (instagram) profileFields.social.instagram = instagram;
+  profileFields.user = req.user.id;
+
+  const profileVals = [
+    'company',
+    'website',
+    'location',
+    'bio',
+    'status',
+    'githubusername',
+    'skills',
+  ];
+  const socialVals = [
+    'youtube',
+    'twitter',
+    'facebook',
+    'linkedin',
+    'instagram',
+  ];
+
+  // Check the incoming values in the body and distribute them in the Profile Object
+  for (let prop in req.body) {
+    if (profileVals.includes(prop)) {
+      profileFields[prop] = req.body[prop];
+    }
+    // Skills need to be converted into an array
+    if (prop == 'skills') {
+      profileFields.skills = req.body.skills
+        .split(',')
+        .map(skill => skill.trim());
+    }
+    if (socialVals.includes(prop)) {
+      profileFields.social[prop] = req.body[prop];
+    }
+  }
 
   // Check if user profile already exists
   let profile = await Profile.findOne({ user: req.user.id });
