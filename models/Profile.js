@@ -8,10 +8,14 @@ const ProfileSchema = mongoose.Schema({
   company: String,
   website: {
     type: String,
-    match: [
-      /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/,
-      'Please use a valid URL with HTTP or HTTPS',
-    ],
+    validate: {
+      validator: validateURL,
+      message: '`{VALUE}` is not a valid URL',
+    },
+    // match: [
+    //   /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/,
+    //   'Please use a valid URL with HTTP or HTTPS',
+    // ],
   },
   location: {
     type: String,
@@ -97,16 +101,57 @@ const ProfileSchema = mongoose.Schema({
     },
   ],
   social: {
-    youtube: String,
-    twitter: String,
-    facebook: String,
-    linkedin: String,
-    instagram: String,
+    youtube: {
+      type: String,
+      validate: {
+        validator: validateURL,
+        message: '`{VALUE}` is not a valid URL',
+      },
+    },
+    twitter: {
+      type: String,
+      validate: {
+        validator: validateURL,
+        message: '`{VALUE}` is not a valid URL',
+      },
+    },
+    facebook: {
+      type: String,
+      validate: {
+        validator: validateURL,
+        message: '`{VALUE}` is not a valid URL',
+      },
+    },
+    linkedin: {
+      type: String,
+      validate: {
+        validator: validateURL,
+        message: '`{VALUE}` is not a valid URL',
+      },
+    },
+    instagram: {
+      type: String,
+      validate: {
+        validator: validateURL,
+        message: '`{VALUE}` is not a valid URL',
+      },
+    },
   },
   createdAt: {
     type: Date,
     default: Date.now,
   },
 });
+
+// URL validator function
+function validateURL(str) {
+  const isValidUrl = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
+  return isValidUrl.test(str);
+}
+
+// ProfileSchema.path('website').validate(
+//   validateURL,
+//   '`{VALUE}` is not a valid URL'
+// );
 
 module.exports = mongoose.model('profile', ProfileSchema);
