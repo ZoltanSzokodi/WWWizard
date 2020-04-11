@@ -144,7 +144,7 @@ exports.likePost = asyncHandler(async (req, res, next) => {
   });
 });
 
-// @desc    Comment a post
+// @desc    Add a comment
 // @route   PUT /api/v1/posts/:id/comment
 // @access  Private
 exports.addComment = asyncHandler(async (req, res, next) => {
@@ -165,5 +165,38 @@ exports.addComment = asyncHandler(async (req, res, next) => {
   res.status(201).json({
     success: true,
     data: post.comments[0],
+  });
+});
+
+// @desc    Delete comment
+// @route   DELETE /api/v1/posts/:post_id/comment/:comment_id
+// @access  Private
+exports.deleteComment = asyncHandler(async (req, res, next) => {
+  const post = await Post.findById(req.params.post_id);
+
+  // Pull comment
+  const comment = post.comments.find(
+    comment => comment._id.toString() === req.params.comment_id
+  );
+
+  // Make sure comment exists
+  if (!comment) {
+    return next(new ErrorResponse('Comment not found', 404));
+  }
+
+  // Check user
+  if (comment.user.toString() !== req.user.id) {
+    return next(
+      new ErrorResponse('User is not authorized to access this route', 401)
+    );
+  }
+
+  post.comments.splice(post.comments.indexOf(comment), 1);
+
+  await post.save();
+
+  res.status(200).json({
+    success: true,
+    data: {},
   });
 });
