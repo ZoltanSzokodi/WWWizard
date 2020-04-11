@@ -1,11 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-// @desc
-// @route   GET /api/v1/posts
-// @access  Public
-router.route('/').get(async (req, res, next) => {
- res.send('Hello from the posts route');
-});
+const { protect } = require('../middlewares/auth');
+
+const { addPost } = require('../controllers/posts');
+
+router.route('/').post(protect, addPost);
 
 module.exports = router;

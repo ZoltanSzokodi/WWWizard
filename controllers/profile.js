@@ -26,7 +26,6 @@ exports.getMyProfile = asyncHandler(async (req, res, next) => {
 // @desc    Get all profiles
 // @route   GET /api/v1/profile
 // @access  Public
-
 exports.getAllProfiles = asyncHandler(async (req, res, next) => {
   const profiles = await Profile.find().populate('user', ['name', 'avatar']);
 

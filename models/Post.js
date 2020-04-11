@@ -7,6 +7,7 @@ const PostSchema = mongoose.Schema({
   },
   text: {
     type: String,
+    trim: true,
     required: [true, 'Please add a text'],
   },
   name: {

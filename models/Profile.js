@@ -32,6 +32,7 @@ const ProfileSchema = mongoose.Schema({
   },
   bio: {
     type: String,
+    trim: true,
     maxlength: [500, 'Bio can not be more than 500 characters'],
   },
   githubusername: String,
@@ -96,6 +97,7 @@ const ProfileSchema = mongoose.Schema({
       },
       description: {
         type: String,
+        trim: true,
         maxlength: [500, "Description can't be longer than 500 characters"],
       },
     },
