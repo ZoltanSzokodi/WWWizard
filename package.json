@@ -1,45 +1,47 @@
 {
- "name": "wwwizard",
- "version": "1.0.0",
- "description": "a mern stack application built to help software developers connect, share experience and job opportunities",
- "main": "server.js",
- "scripts": {
-  "start": "SET NODE_ENV=production & node server",
-  "server": "nodemon server"
- },
- "repository": {
-  "type": "git",
-  "url": "git+https://github.com/ZoltanSzokodi/WWWizard.git"
- },
- "keywords": [
-  "web",
-  "development",
-  "networking",
-  "job",
-  "opportunity",
-  "open",
-  "source"
- ],
- "author": "Zoltan Szokodi",
- "license": "MIT",
- "bugs": {
-  "url": "https://github.com/ZoltanSzokodi/WWWizard/issues"
- },
- "homepage": "https://github.com/ZoltanSzokodi/WWWizard#readme",
- "dependencies": {
-  "axios": "^0.19.2",
-  "bcryptjs": "^2.4.3",
-  "colors": "^1.4.0",
-  "cookie-parser": "^1.4.5",
-  "dotenv": "^8.2.0",
-  "express": "^4.17.1",
-  "gravatar": "^1.8.0",
-  "jsonwebtoken": "^8.5.1",
-  "mongoose": "^5.9.7",
-  "morgan": "^1.10.0"
- },
- "devDependencies": {
-  "concurrently": "^5.1.0",
-  "nodemon": "^2.0.2"
- }
+  "name": "wwwizard",
+  "version": "1.0.0",
+  "description": "a mern stack application built to help software developers connect, share experience and job opportunities",
+  "main": "server.js",
+  "scripts": {
+    "start": "SET NODE_ENV=production & node server",
+    "server": "nodemon server",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run client\" \"npm run server\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZoltanSzokodi/WWWizard.git"
+  },
+  "keywords": [
+    "web",
+    "development",
+    "networking",
+    "job",
+    "opportunity",
+    "open",
+    "source"
+  ],
+  "author": "Zoltan Szokodi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ZoltanSzokodi/WWWizard/issues"
+  },
+  "homepage": "https://github.com/ZoltanSzokodi/WWWizard#readme",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "bcryptjs": "^2.4.3",
+    "colors": "^1.4.0",
+    "cookie-parser": "^1.4.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "gravatar": "^1.8.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.7",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "concurrently": "^5.1.0",
+    "nodemon": "^2.0.2"
+  }
 }
