@@ -10,6 +10,8 @@ const gravatar = require('gravatar');
 exports.registerUser = asyncHandler(async (req, res, next) => {
   const { email } = req.body;
 
+  console.log(req.body);
+
   let user = await User.findOne({ email });
   // Check if user already exists with the provided email
   if (user) {
