@@ -117,23 +117,77 @@ exports.deletePost = asyncHandler(async (req, res, next) => {
 // @desc    Like or Unlike a post
 // @route   PUT /api/v1/posts/:id/like
 // @access  Private
+// exports.toggleLike = asyncHandler(async (req, res, next) => {
+//   const post = await Post.findById(req.params.id);
+
+//   // Add or Remove user's id from likes array
+//   // 1) filter the likes array for the user id
+//   const likeCtrl = post.likes.filter(
+//     like => like.user.toString() === req.user.id
+//   );
+//   // 2) create a boolean by checking the length of the likeCtrl
+//   const isLiked = likeCtrl.length > 0;
+
+//   // 3) if true remove the user id (unlike) - else add the user id to the likes array (like)
+//   if (isLiked) {
+//     post.likes.splice(post.likes.indexOf(likeCtrl[0]), 1);
+//   } else {
+//     post.likes.unshift({ user: req.user.id });
+//   }
+
+//   await post.save();
+
+//   res.status(200).json({
+//     success: true,
+//     count: post.likes.length,
+//     data: post.likes,
+//   });
+// });
+
+// @desc    Like a post
+// @route   PUT /api/v1/posts/:id/likes
+// @access  Private
 exports.likePost = asyncHandler(async (req, res, next) => {
   const post = await Post.findById(req.params.id);
 
-  // Add or Remove user's id from likes array
-  // 1) filter the likes for the user id
-  const likeCtrl = post.likes.filter(
+  const isLiked = post.likes.some(like => like.user.toString() === req.user.id);
+
+  if (isLiked) {
+    return next(
+      new ErrorResponse('This route has already been liked by user', 401)
+    );
+  }
+
+  post.likes.unshift({ user: req.user.id });
+
+  await post.save();
+
+  res.status(200).json({
+    success: true,
+    count: post.likes.length,
+    data: post.likes,
+  });
+});
+
+// @desc    Unlike post
+// @route   DELETE /api/v1/posts/:id/likes
+// @access  Private
+exports.unlikePost = asyncHandler(async (req, res, next) => {
+  const post = await Post.findById(req.params.id);
+
+  const isLiked = post.likes.some(like => like.user.toString() === req.user.id);
+
+  if (!isLiked) {
+    return next(
+      new ErrorResponse('This route has already been unliked by user', 401)
+    );
+  }
+
+  const likeToRemove = post.likes.find(
     like => like.user.toString() === req.user.id
   );
-  // 2) check if the post was already liked by the user (Boolean)
-  const isLiked = likeCtrl.length > 0;
 
-  // 3) if true remove the user id (unlike) - else add the user id to the likes array (like)
-  if (isLiked) {
-    post.likes.splice(post.likes.indexOf(likeCtrl[0]), 1);
-  } else {
-    post.likes.unshift({ user: req.user.id });
-  }
+  post.likes.splice(post.likes.indexOf(likeToRemove), 1);
 
   await post.save();
 
@@ -145,7 +199,7 @@ exports.likePost = asyncHandler(async (req, res, next) => {
 });
 
 // @desc    Add a comment
-// @route   PUT /api/v1/posts/:id/comment
+// @route   PUT /api/v1/posts/:id/comments
 // @access  Private
 exports.addComment = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.user.id);
@@ -169,7 +223,7 @@ exports.addComment = asyncHandler(async (req, res, next) => {
 });
 
 // @desc    Delete comment
-// @route   DELETE /api/v1/posts/:post_id/comment/:comment_id
+// @route   DELETE /api/v1/posts/:post_id/comments/:comment_id
 // @access  Private
 exports.deleteComment = asyncHandler(async (req, res, next) => {
   const post = await Post.findById(req.params.post_id);
