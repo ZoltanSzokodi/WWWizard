@@ -16,7 +16,6 @@ const store = createStore(
 
 // set up a store subscription listener
 // to store the users token in localStorage
-
 let currentState;
 
 store.subscribe(() => {

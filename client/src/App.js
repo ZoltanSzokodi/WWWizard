@@ -25,7 +25,6 @@ const App = () => {
       setAuthToken(localStorage.token);
       store.dispatch(loadUser());
     }
-    store.dispatch(loadUser());
   }, []);
 
   return (
