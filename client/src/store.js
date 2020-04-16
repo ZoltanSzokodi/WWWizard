@@ -14,8 +14,7 @@ const store = createStore(
   composeWithDevTools(applyMiddleware(...middleware))
 );
 
-// set up a store subscription listener
-// to store the users token in localStorage
+// prevent auth error on first run of subscription
 let currentState = { auth: { token: null } };
 
 store.subscribe(() => {
