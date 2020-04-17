@@ -49,17 +49,17 @@ const CreateProfile = ({ createProfile, history }) => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    const filteredFormData = { ...formData };
+    // const filteredFormData = { ...formData };
 
     // if a field is empty remove it from the body so it doesn't get validated by mongoose
     // this is also checked in the createProfile controller (backend) just in case
-    for (let prop in filteredFormData) {
-      if (filteredFormData[prop] === '') {
-        delete filteredFormData[prop];
-      }
-    }
+    // for (let prop in filteredFormData) {
+    //   if (filteredFormData[prop] === '') {
+    //     delete filteredFormData[prop];
+    //   }
+    // }
 
-    createProfile(filteredFormData, history);
+    createProfile(formData, history);
   };
 
   return (
@@ -74,7 +74,7 @@ const CreateProfile = ({ createProfile, history }) => {
 
       <form className='form' onSubmit={handleSubmit}>
         <div className='form-group'>
-          <select required name='status' value={status} onChange={handleChange}>
+          <select name='status' value={status} onChange={handleChange}>
             <option value=''>* Select Professional Status</option>
             <option value='Developer'>Developer</option>
             <option value='Junior Developer'>Junior Developer</option>
@@ -131,7 +131,7 @@ const CreateProfile = ({ createProfile, history }) => {
 
         <div className='form-group'>
           <input
-            required
+            // required
             type='text'
             placeholder='* Skills'
             name='skills'

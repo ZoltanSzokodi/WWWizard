@@ -57,44 +57,7 @@ exports.getUserProfile = asyncHandler(async (req, res, next) => {
 // @desc    Create or Update profile
 // @route   POST /api/v1/profile
 // @access  Private
-exports.postUserProfile = asyncHandler(async (req, res) => {
-  console.log(req.body);
-  // const {
-  //   company,
-  //   location,
-  //   website,
-  //   bio,
-  //   skills,
-  //   status,
-  //   githubusername,
-  //   youtube,
-  //   twitter,
-  //   instagram,
-  //   linkedin,
-  //   facebook,
-  // } = req.body;
-
-  // Build profile object
-  // const profileFields = {};
-  // profileFields.user = req.user.id;
-  // if (company) profileFields.company = company;
-  // if (website) profileFields.website = website;
-  // if (location) profileFields.location = location;
-  // if (bio) profileFields.bio = bio;
-  // if (status) profileFields.status = status;
-  // if (githubusername) profileFields.githubusername = githubusername;
-  // if (skills) {
-  //   profileFields.skills = skills.split(',').map(skill => skill.trim());
-  // }
-
-  // Build social object and add to profileFields
-  // profileFields.social = {};
-  // if (youtube) profileFields.social.youtube = youtube;
-  // if (twitter) profileFields.social.twitter = twitter;
-  // if (facebook) profileFields.social.facebook = facebook;
-  // if (linkedin) profileFields.social.linkedin = linkedin;
-  // if (instagram) profileFields.social.instagram = instagram;
-
+exports.postUserProfile = asyncHandler(async (req, res, next) => {
   // Build profile object with social nested object
   const profileFields = {};
   profileFields.social = {};
@@ -122,43 +85,58 @@ exports.postUserProfile = asyncHandler(async (req, res) => {
     if (profileVals.includes(prop)) {
       // if a prop is an empty string set it to undefined
       // this is also checked on the frontend before sending the body just in case
-      if (req.body[prop] === '') {
-        profileFields[prop] = undefined;
+      // if (req.body[prop] === '') {
+      //   !profileFields[prop];
+      // } else {
+      //   profileFields[prop] = req.body[prop];
+      // }
+      if (req.body[prop] !== '') {
+        if (prop == 'skills') {
+          profileFields.skills = req.body.skills
+            .split(',')
+            .map(skill => skill.trim());
+        } else {
+          profileFields[prop] = req.body[prop];
+        }
       } else {
-        profileFields[prop] = req.body[prop];
+        profileFields[prop] = undefined;
       }
     }
     // Skills need to be converted into an array
-    if (prop == 'skills') {
-      profileFields.skills = req.body.skills
-        .split(',')
-        .map(skill => skill.trim());
-    }
+    // if (prop == 'skills') {
+    //   profileFields.skills = req.body.skills
+    //     .split(',')
+    //     .map(skill => skill.trim());
+    // }
     if (socialVals.includes(prop)) {
-      if (req.body[prop] === '') {
-        profileFields.social[prop] = undefined;
-      } else {
+      // if (req.body[prop] === '') {
+      //   !profileFields.social[prop];
+      // } else {
+      //   profileFields.social[prop] = req.body[prop];
+      // }
+      if (req.body[prop] !== '') {
         profileFields.social[prop] = req.body[prop];
+      } else {
+        profileFields.social[prop] = undefined;
       }
     }
   }
 
-  // Check if user profile already exists
-  let profile = await Profile.findOne({ user: req.user.id });
+  // Check the skills field for length and convert to array
+  // if (!profileFields.skills || profileFields.skills.length === 0) {
+  //   return next(new ErrorResponse('Please add at least one skill', 400));
+  // } else {
+  //   profileFields.skills = profileFields.skills
+  //     .split(',')
+  //     .map(skill => skill.trim());
+  // }
 
-  // If user profile exists, update
-  if (profile) {
-    profile = await Profile.findOneAndUpdate(
-      { user: req.user.id },
-      { $set: profileFields },
-      { new: true, runValidators: true }
-    );
-  }
-
-  // If user profile does not exist, create
-  if (!profile) {
-    profile = await Profile.create(profileFields);
-  }
+  // Check if user profile already exists and update it or create a new one
+  let profile = await Profile.findOneAndUpdate(
+    { user: req.user.id },
+    { $set: profileFields },
+    { new: true, runValidators: true, upsert: true }
+  );
 
   res.status(201).json({
     success: true,
