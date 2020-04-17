@@ -58,6 +58,7 @@ exports.getUserProfile = asyncHandler(async (req, res, next) => {
 // @route   POST /api/v1/profile
 // @access  Private
 exports.postUserProfile = asyncHandler(async (req, res) => {
+  console.log(req.body);
   // const {
   //   company,
   //   location,
@@ -119,7 +120,13 @@ exports.postUserProfile = asyncHandler(async (req, res) => {
   // Check the incoming values in the body and distribute them in the Profile Object
   for (let prop in req.body) {
     if (profileVals.includes(prop)) {
-      profileFields[prop] = req.body[prop];
+      // if a prop is an empty string set it to undefined
+      // this is also checked on the frontend before sending the body just in case
+      if (req.body[prop] === '') {
+        profileFields[prop] = undefined;
+      } else {
+        profileFields[prop] = req.body[prop];
+      }
     }
     // Skills need to be converted into an array
     if (prop == 'skills') {
@@ -128,7 +135,11 @@ exports.postUserProfile = asyncHandler(async (req, res) => {
         .map(skill => skill.trim());
     }
     if (socialVals.includes(prop)) {
-      profileFields.social[prop] = req.body[prop];
+      if (req.body[prop] === '') {
+        profileFields.social[prop] = undefined;
+      } else {
+        profileFields.social[prop] = req.body[prop];
+      }
     }
   }
 

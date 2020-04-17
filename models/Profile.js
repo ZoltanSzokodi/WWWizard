@@ -19,7 +19,7 @@ const ProfileSchema = mongoose.Schema({
   },
   location: {
     type: String,
-    required: [true, 'Please add your city of location'],
+    // required: [true, 'Please add your city of location'],
   },
   status: {
     type: String,
@@ -27,7 +27,7 @@ const ProfileSchema = mongoose.Schema({
   },
   skills: {
     type: [String],
-    reguired: [true, 'Please add at least one skill'],
+    required: [true, 'Please add at least one skill'],
     minlength: 1,
   },
   bio: {
@@ -147,6 +147,7 @@ const ProfileSchema = mongoose.Schema({
 
 // URL validator function
 function validateURL(str) {
+  // if (str === '') return;
   const isValidUrl = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
   return isValidUrl.test(str);
 }

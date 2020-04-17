@@ -1,8 +1,10 @@
 import React, { useState, Fragment } from 'react';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { createProfile } from '../../actions/profile';
 import PropTypes from 'prop-types';
 
-const CreateProfile = () => {
+const CreateProfile = ({ createProfile, history }) => {
   const [formData, setFormData] = useState({
     company: '',
     website: '',
@@ -45,7 +47,20 @@ const CreateProfile = () => {
     });
   };
 
-  console.log(formData);
+  const handleSubmit = e => {
+    e.preventDefault();
+    const filteredFormData = { ...formData };
+
+    // if a field is empty remove it from the body so it doesn't get validated by mongoose
+    // this is also checked in the createProfile controller (backend) just in case
+    for (let prop in filteredFormData) {
+      if (filteredFormData[prop] === '') {
+        delete filteredFormData[prop];
+      }
+    }
+
+    createProfile(filteredFormData, history);
+  };
 
   return (
     <Fragment>
@@ -57,9 +72,9 @@ const CreateProfile = () => {
 
       <small>* = required field</small>
 
-      <form className='form'>
+      <form className='form' onSubmit={handleSubmit}>
         <div className='form-group'>
-          <select name='status' value={status} onChange={handleChange}>
+          <select required name='status' value={status} onChange={handleChange}>
             <option value=''>* Select Professional Status</option>
             <option value='Developer'>Developer</option>
             <option value='Junior Developer'>Junior Developer</option>
@@ -116,6 +131,7 @@ const CreateProfile = () => {
 
         <div className='form-group'>
           <input
+            required
             type='text'
             placeholder='* Skills'
             name='skills'
@@ -228,6 +244,8 @@ const CreateProfile = () => {
   );
 };
 
-CreateProfile.propTypes = {};
+CreateProfile.propTypes = {
+  createProfile: PropTypes.func.isRequired,
+};
 
-export default CreateProfile;
+export default connect(null, { createProfile })(withRouter(CreateProfile));
