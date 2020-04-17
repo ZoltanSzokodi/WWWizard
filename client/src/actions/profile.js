@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { setAlert } from './alert';
 import { GET_PROFILE, PROFILE_ERROR } from './types';
+// import { loadUser } from './auth';
 
 export const getCurrentProfile = () => async dispatch => {
   try {
