@@ -85,45 +85,55 @@ exports.postUserProfile = asyncHandler(async (req, res, next) => {
     if (profileVals.includes(prop)) {
       // if a prop is an empty string set it to undefined
       // this is also checked on the frontend before sending the body just in case
-      // if (req.body[prop] === '') {
-      //   !profileFields[prop];
-      // } else {
-      //   profileFields[prop] = req.body[prop];
+      if (req.body[prop] === '') {
+        !profileFields[prop];
+      } else {
+        profileFields[prop] = req.body[prop];
+      }
+      //   if (req.body[prop] !== '') {
+      //     if (prop == 'skills') {
+      //       profileFields.skills = req.body.skills
+      //         .split(',')
+      //         .map(skill => skill.trim());
+      //     } else {
+      //       profileFields[prop] = req.body[prop];
+      //     }
+      //   } else {
+      //     profileFields[prop] = undefined;
+      //   }
       // }
-      if (req.body[prop] !== '') {
-        if (prop == 'skills') {
-          profileFields.skills = req.body.skills
+      // Skills need to be converted into an array
+      if (prop == 'skills') {
+        // Check the skills field for length and convert to array
+        if (
+          !profileFields.skills ||
+          profileFields.skills.length === 0 ||
+          profileFields.skills[0] === ''
+        ) {
+          return next(new ErrorResponse('Please add at least one skill', 400));
+        } else {
+          profileFields.skills = profileFields.skills
             .split(',')
             .map(skill => skill.trim());
-        } else {
-          profileFields[prop] = req.body[prop];
         }
-      } else {
-        profileFields[prop] = undefined;
       }
     }
-    // Skills need to be converted into an array
-    // if (prop == 'skills') {
-    //   profileFields.skills = req.body.skills
-    //     .split(',')
-    //     .map(skill => skill.trim());
-    // }
     if (socialVals.includes(prop)) {
-      // if (req.body[prop] === '') {
-      //   !profileFields.social[prop];
-      // } else {
-      //   profileFields.social[prop] = req.body[prop];
-      // }
-      if (req.body[prop] !== '') {
-        profileFields.social[prop] = req.body[prop];
+      if (req.body[prop] === '') {
+        !profileFields.social[prop];
       } else {
-        profileFields.social[prop] = undefined;
+        profileFields.social[prop] = req.body[prop];
       }
+      // if (req.body[prop] !== '') {
+      //   profileFields.social[prop] = req.body[prop];
+      // } else {
+      //   profileFields.social[prop] = undefined;
+      // }
     }
   }
 
   // Check the skills field for length and convert to array
-  // if (!profileFields.skills || profileFields.skills.length === 0) {
+  // if (!profileFields.skills || profileFields.skills[0] === '') {
   //   return next(new ErrorResponse('Please add at least one skill', 400));
   // } else {
   //   profileFields.skills = profileFields.skills
@@ -164,6 +174,8 @@ exports.deleteProfileAndUser = asyncHandler(async (req, res, next) => {
 // @access  Private
 exports.addExperience = asyncHandler(async (req, res, next) => {
   const newExperience = { ...req.body };
+
+  console.log(req.body);
 
   const profile = await Profile.findOne({ user: req.user });
 

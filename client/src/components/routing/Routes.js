@@ -6,6 +6,8 @@ import Alert from '../layout/Alert';
 import Dashboard from '../dashboard/Dashboard';
 import ProfileForm from '../profile-forms/ProfileForm';
 import PrivateRoute from '../routing/PrivateRoute';
+import AddExperience from '../profile-forms/AddExperience';
+import AddEducation from '../profile-forms/AddEducation';
 
 const Routes = props => {
   return (
@@ -17,6 +19,8 @@ const Routes = props => {
         <PrivateRoute exact path='/dashboard' component={Dashboard} />
         <PrivateRoute exact path='/create-profile' component={ProfileForm} />
         <PrivateRoute exact path='/edit-profile' component={ProfileForm} />
+        <PrivateRoute exact path='/add-experience' component={AddExperience} />
+        <PrivateRoute exact path='/add-education' component={AddEducation} />
       </Switch>
     </section>
   );

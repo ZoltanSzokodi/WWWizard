@@ -75,15 +75,15 @@ const ProfileForm = ({
 
   const handleSubmit = e => {
     e.preventDefault();
-    // const filteredFormData = { ...formData };
+    const filteredFormData = { ...formData };
 
     // if a field is empty remove it from the body so it doesn't get validated by mongoose
     // this is also checked in the createProfile controller (backend) just in case
-    // for (let prop in filteredFormData) {
-    //   if (filteredFormData[prop] === '') {
-    //     delete filteredFormData[prop];
-    //   }
-    // }
+    for (let prop in filteredFormData) {
+      if (filteredFormData[prop] === '') {
+        delete filteredFormData[prop];
+      }
+    }
 
     createProfile(formData, history, profile ? true : false);
   };

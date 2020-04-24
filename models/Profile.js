@@ -57,7 +57,7 @@ const ProfileSchema = mongoose.Schema({
       },
       to: {
         type: Date,
-        required: [true, 'Please add finishing date'],
+        // required: [true, 'Please add finishing date'],
       },
       current: {
         type: Boolean,
@@ -89,7 +89,7 @@ const ProfileSchema = mongoose.Schema({
       },
       to: {
         type: Date,
-        required: [true, 'Please add finishing date'],
+        // required: [true, 'Please add finishing date'],
       },
       current: {
         type: Boolean,
