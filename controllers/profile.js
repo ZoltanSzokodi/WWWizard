@@ -1,4 +1,5 @@
 const Profile = require('../models/Profile');
+const Post = require('../models/Post');
 const User = require('../models/User');
 const asyncHandler = require('../middlewares/asyncHandler');
 const ErrorResponse = require('../utils/errorResponse');
@@ -158,6 +159,8 @@ exports.postUserProfile = asyncHandler(async (req, res, next) => {
 // @route   DELETE /api/v1/profile
 // @access  Private
 exports.deleteProfileAndUser = asyncHandler(async (req, res, next) => {
+  // Delete user's posts
+  await Post.deleteMany({ user: req.user });
   // Delete profile
   await Profile.findOneAndDelete({ user: req.user.id });
   // Delete user
@@ -247,10 +250,10 @@ exports.deleteExperience = asyncHandler(async (req, res, next) => {
 
   await profile.save();
 
-  res.status(201).json({
+  res.status(200).json({
     success: true,
-    profile: profile.id,
-    data: profile.experience,
+    // profile: profile.id,
+    data: profile,
   });
 });
 
@@ -330,10 +333,10 @@ exports.deleteEducation = asyncHandler(async (req, res, next) => {
 
   await profile.save();
 
-  res.status(201).json({
+  res.status(200).json({
     success: true,
-    profile: profile.id,
-    data: profile.education,
+    // profile: profile.id,
+    data: profile,
   });
 });
 
